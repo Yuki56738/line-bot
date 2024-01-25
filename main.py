@@ -20,7 +20,7 @@ app = Flask(__name__)
 #     return 200
 configuration = Configuration(access_token=TOKEN)
 handler = WebhookHandler(SECRET)
-@app.post("/webhook")
+@app.route("/callback")
 def callback():
     signature = request.headers['X-Line-Signature']
 
