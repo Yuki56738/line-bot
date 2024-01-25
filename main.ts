@@ -6,6 +6,8 @@ import * as https from "https";
 const express = require('express')
 console.log('Hello')
 
+const crypto = require('crypto')
+
 // @ts-ignore
 // import * as process from "process";
 
@@ -15,6 +17,11 @@ require('dotenv').config()
 const PORT = process.env.PORT || 3000
 const channel_secret = process.env.CHANNEL_SECRET
 const TOKEN = process.env.CHANNEL_ACCESS_TOKEN
+
+// @ts-ignore
+function validate_signature(signature, body) {
+    return signature = crypto.createHmac('sha256', channel_secret)
+}
 const app = express()
 
 app.use(express.json())
@@ -29,17 +36,17 @@ app.use(
 //
 // }
 // @ts-ignore
-app.get("/", (req, res)=>{
-    res.sendStatus(200)
-})
+// app.get("/", (req, res)=>{
+//     res.sendStatus(200)
+// })
 // @ts-ignore
 let dataString;
 
 app.post("/webhook", function (req: any, res: any) {
     res.send("HTTP post request was sent.")
+
     if (req.body.events[0].type === "message") {
         dataString = JSON.stringify({
-
             replyToken: // @ts-ignore
             req.body.events[0].replyToken,
             onmessage: [
@@ -71,7 +78,7 @@ const request = https.request(webhookOptions, (res)=>{
 request.on('error', (err)=>{
     console.error(err)
 })
-request.write(dataString)
+// request.write(dataString)
 request.end()
 app.listen(PORT, () =>{
     console.log(`App listening port ${PORT}`)
