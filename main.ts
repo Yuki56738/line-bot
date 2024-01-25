@@ -6,7 +6,8 @@ import * as https from "https";
 const express = require('express')
 console.log('Hello')
 
-const crypto = require('crypto')
+import * as crypto from "crypto"
+// const crypto = require('crypto')
 
 // @ts-ignore
 // import * as process from "process";
@@ -20,7 +21,7 @@ const TOKEN = process.env.CHANNEL_ACCESS_TOKEN
 
 // @ts-ignore
 function validate_signature(signature, body) {
-    return signature = crypto.createHmac('sha256', channel_secret)
+    return signature = crypto.createHmac('sha256', channel_secret!)
 }
 const app = express()
 
@@ -36,15 +37,18 @@ app.use(
 //
 // }
 // @ts-ignore
-// app.get("/", (req, res)=>{
-//     res.sendStatus(200)
-// })
+app.get("/", (req, res)=>{
+    if(validate_signature(req.headers['x-line-signature'], req.body)){
+
+    }
+    res.sendStatus(200)
+})
 // @ts-ignore
 let dataString;
 
 app.post("/webhook", function (req: any, res: any) {
     res.send("HTTP post request was sent.")
-
+    console.log(`Request from: ${req.originalUrl.toString()}`)
     if (req.body.events[0].type === "message") {
         dataString = JSON.stringify({
             replyToken: // @ts-ignore
