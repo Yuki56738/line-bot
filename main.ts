@@ -47,10 +47,10 @@ app.get("/", (req, res) => {
     //         .update(res)
     //         .digest("base64")
     // }
-    res.sendStatus(200)
+    // res.sendStatus(200)
 })
 // @ts-ignore
-let dataString;
+// let dataString;
 
 app.post("/webhook", function (req: any, res: any) {
     res.send("HTTP post request was sent.")
@@ -61,8 +61,9 @@ app.post("/webhook", function (req: any, res: any) {
     //         .digest("base64")
     // }
     console.log(`Request from: ${req.originalUrl.toString()}`)
+    // @ts-ignore
     if (req.body.events[0].type === "message") {
-        dataString = JSON.stringify({
+        // dataString = JSON.stringify({
             replyToken: // @ts-ignore
             req.body.events[0].replyToken,
             onmessage: [
@@ -70,8 +71,8 @@ app.post("/webhook", function (req: any, res: any) {
                     type: "text",
                     text: "Hello, user"
                 },
-            ],
-        })
+            ]
+        // })
 
     }
 
@@ -84,7 +85,7 @@ app.post("/webhook", function (req: any, res: any) {
         path: "/v2/bot/message/reply",
         method: "POST",
         headers: headers,
-        body: dataString,
+        body: dataString!,
     }
     const request = https.request(webhookOptions, (res) => {
         res.on("data", (d) => {
