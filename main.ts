@@ -3,6 +3,7 @@ import * as process from "process";
 import * as line from '@line/bot-sdk'
 import {messagingApi} from "@line/bot-sdk";
 import * as https from "https";
+
 const express = require('express')
 console.log('Hello')
 
@@ -38,15 +39,15 @@ app.use(
 //
 // }
 // @ts-ignore
-app.get("/", (req, res)=>{
+app.get("/", (req, res) => {
     res.return(200)
     // if(validate_signature(res.headers['x-line-signature'], req.body)){
-        const signature = crypto
-            .createHmac("SHA256", channel_secret)
-            .update(res)
-            .digest("base64")
+    //     const signature = crypto
+    //         .createHmac("SHA256", channel_secret)
+    //         .update(res)
+    //         .digest("base64")
     // }
-    // res.sendStatus(200)
+    res.sendStatus(200)
 })
 // @ts-ignore
 let dataString;
@@ -54,48 +55,50 @@ let dataString;
 app.post("/webhook", function (req: any, res: any) {
     res.send("HTTP post request was sent.")
     // if(validate_signature(res.headers['x-line-signature'], req.body)){
-        const signature = crypto
-            .createHmac("SHA256", channel_secret)
-            .update(res)
-            .digest("base64")
+    //     const signature = crypto
+    //         .createHmac("SHA256", channel_secret)
+    //         .update(res)
+    //         .digest("base64")
     // }
     console.log(`Request from: ${req.originalUrl.toString()}`)
     if (req.body.events[0].type === "message") {
         dataString = JSON.stringify({
             replyToken: // @ts-ignore
             req.body.events[0].replyToken,
-            // onmessage: [
-            //     {
-            //         type: "text",
-            //         text: "Hello, user"
-            //     },
-            // ],
+            onmessage: [
+                {
+                    type: "text",
+                    text: "Hello, user"
+                },
+            ],
         })
+
     }
 
-})
-const headers = {
-    "Contest-Type": "application/json",
-    Authorization: "Bearer" + TOKEN
-}
-const webhookOptions = {
-    hostname: "api.line.me",
-    path: "/v2/bot/message/reply",
-    method: "POST",
-    headers: headers,
-    body: dataString,
-}
-const request = https.request(webhookOptions, (res)=>{
-    res.on("data", (d)=>{
-        process.stdout.write(d)
+    const headers = {
+        "Contest-Type": "application/json",
+        Authorization: "Bearer" + TOKEN
+    }
+    const webhookOptions = {
+        hostname: "api.line.me",
+        path: "/v2/bot/message/reply",
+        method: "POST",
+        headers: headers,
+        body: dataString,
+    }
+    const request = https.request(webhookOptions, (res) => {
+        res.on("data", (d) => {
+            process.stdout.write(d)
+        })
     })
-})
-request.on('error', (err)=>{
-    console.error(err)
-})
+    request.on('error', (err) => {
+        console.error(err)
+    })
 // request.write(dataString)
-request.end()
-app.listen(PORT, () =>{
+    request.end()
+})
+
+app.listen(PORT, () => {
     console.log(`App listening port ${PORT}`)
 })
 
