@@ -1,10 +1,10 @@
-import dotenv from 'dotenv'
+import  {config} from 'dotenv'
 // import * as process from "process";
 import * as line from '@line/bot-sdk'
 import {messagingApi} from "@line/bot-sdk";
 const https = require('https')
 // import * as https from "https";
-
+// import configDotenv from 'dotenv'
 const express = require('express')
 console.log('Hello')
 
@@ -15,7 +15,8 @@ import * as repl from "repl";
 // @ts-ignore
 // import * as process from "process";
 
-require('dotenv').config()
+// require('dotenv').config()
+config()
 // @ts-ignore
 // console.log(process.env.CHANNEL_SECRET.toString())
 const PORT = process.env.PORT || 3000
