@@ -62,16 +62,22 @@ app.post("/webhook", function (req: any, res: any) {
     // }
     console.log(`Request from: ${req.originalUrl.toString()}`)
     // @ts-ignore
+    let dataString
     if (req.body.events[0].type === "message") {
-        // dataString = JSON.stringify({
-            replyToken: // @ts-ignore
-            req.body.events[0].replyToken,
-            onmessage: [
+        dataString = JSON.stringify({
+
+            replyToken: req.body.events[0].replyToken,
+            messages: [
                 {
-                    type: "text",
-                    text: "Hello, user"
-                },
+                    'type': 'text',
+                    'text': 'Hello, user!'
+                }
             ]
+        })
+        // dataString = JSON.stringify({
+        //     replyToken: // @ts-ignore
+        //     req.body.events[0].replyToken,
+
         // })
 
     }
@@ -95,7 +101,7 @@ app.post("/webhook", function (req: any, res: any) {
     request.on('error', (err) => {
         console.error(err)
     })
-// request.write(dataString)
+    request.write(dataString)
     request.end()
 })
 
