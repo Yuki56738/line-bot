@@ -1,8 +1,9 @@
 import dotenv from 'dotenv'
-import * as process from "process";
+// import * as process from "process";
 import * as line from '@line/bot-sdk'
 import {messagingApi} from "@line/bot-sdk";
-import * as https from "https";
+const https = require('https')
+// import * as https from "https";
 
 const express = require('express')
 console.log('Hello')
@@ -40,7 +41,7 @@ app.use(
 // }
 // @ts-ignore
 app.get("/", (req, res) => {
-    res.return(200)
+    res.sendStatus(200)
     // if(validate_signature(res.headers['x-line-signature'], req.body)){
     //     const signature = crypto
     //         .createHmac("SHA256", channel_secret)
@@ -64,6 +65,7 @@ app.post("/webhook", function (req: any, res: any) {
     // @ts-ignore
     let dataString
     if (req.body.events[0].type === "message") {
+        console.log(res.body.messages.toString())
         dataString = JSON.stringify({
 
             replyToken: req.body.events[0].replyToken,
@@ -74,11 +76,6 @@ app.post("/webhook", function (req: any, res: any) {
                 }
             ]
         })
-        // dataString = JSON.stringify({
-        //     replyToken: // @ts-ignore
-        //     req.body.events[0].replyToken,
-
-        // })
 
     }
 
