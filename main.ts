@@ -7,6 +7,7 @@ const express = require('express')
 console.log('Hello')
 
 import * as crypto from "crypto"
+import * as repl from "repl";
 // const crypto = require('crypto')
 
 // @ts-ignore
@@ -16,13 +17,13 @@ require('dotenv').config()
 // @ts-ignore
 // console.log(process.env.CHANNEL_SECRET.toString())
 const PORT = process.env.PORT || 3000
-const channel_secret = process.env.CHANNEL_SECRET
-const TOKEN = process.env.CHANNEL_ACCESS_TOKEN
+const channel_secret = process.env.CHANNEL_SECRET!
+const TOKEN = process.env.CHANNEL_ACCESS_TOKEN!
 
 // @ts-ignore
-function validate_signature(signature, body) {
-    return signature = crypto.createHmac('sha256', channel_secret!)
-}
+// function validate_signature(signature, body) {
+//     return signature = crypto.createHmac('sha256', channel_secret!)
+// }
 const app = express()
 
 app.use(express.json())
@@ -38,27 +39,37 @@ app.use(
 // }
 // @ts-ignore
 app.get("/", (req, res)=>{
-    if(validate_signature(req.headers['x-line-signature'], req.body)){
-
-    }
-    res.sendStatus(200)
+    res.return(200)
+    // if(validate_signature(res.headers['x-line-signature'], req.body)){
+        const signature = crypto
+            .createHmac("SHA256", channel_secret)
+            .update(res)
+            .digest("base64")
+    // }
+    // res.sendStatus(200)
 })
 // @ts-ignore
 let dataString;
 
 app.post("/webhook", function (req: any, res: any) {
     res.send("HTTP post request was sent.")
+    // if(validate_signature(res.headers['x-line-signature'], req.body)){
+        const signature = crypto
+            .createHmac("SHA256", channel_secret)
+            .update(res)
+            .digest("base64")
+    // }
     console.log(`Request from: ${req.originalUrl.toString()}`)
     if (req.body.events[0].type === "message") {
         dataString = JSON.stringify({
             replyToken: // @ts-ignore
             req.body.events[0].replyToken,
-            onmessage: [
-                {
-                    type: "text",
-                    text: "Hello, user"
-                },
-            ]
+            // onmessage: [
+            //     {
+            //         type: "text",
+            //         text: "Hello, user"
+            //     },
+            // ],
         })
     }
 
