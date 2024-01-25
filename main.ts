@@ -90,9 +90,9 @@ app.post("/webhook", function (req: any, res: any) {
         headers: headers,
         body: dataString!,
     }
-    const request = https.request(webhookOptions, (res) => {
+    const request = https.request(webhookOptions, (res: any) => {
         try {
-            res.on("data", (d) => {
+            res.on("data", (d: any) => {
                 process.stdout.write(d)
             })
         }catch (e) {
