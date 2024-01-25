@@ -55,17 +55,18 @@ app.get("/", (req, res) => {
 // let dataString;
 
 app.post("/webhook", function (req: any, res: any) {
-    res.send("HTTP post request was sent.")
+    res.sendStatus(200)
+    // res.send("HTTP post request was sent.")
     // if(validate_signature(res.headers['x-line-signature'], req.body)){
-    //     const signature = crypto
-    //         .createHmac("SHA256", channel_secret)
-    //         .update(res)
-    //         .digest("base64")
+        const signature = crypto
+            .createHmac("SHA256", channel_secret)
+            .update(res)
+            .digest("base64")
     // }
     console.log(`Request from: ${req.originalUrl.toString()}`)
     // @ts-ignore
     let dataString
-    if (req.body.events[0].type === "message") {
+    // if (req.body.events[0].type === "message") {
         console.log(res.body.messages.toString())
         dataString = JSON.stringify({
 
@@ -78,7 +79,7 @@ app.post("/webhook", function (req: any, res: any) {
             ]
         })
 
-    }
+    // }
 
     const headers = {
         "Contest-Type": "application/json",
