@@ -20,13 +20,14 @@ app = Flask(__name__)
 #     return 200
 configuration = Configuration(access_token=TOKEN)
 handler = WebhookHandler(SECRET)
-@app.route("/callback")
+
+
+@app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
 
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-
 
     # handle webhook body
     try:
@@ -34,6 +35,7 @@ def callback():
     except InvalidSignatureError:
         app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
+    return 'OK'
 
 
 @handler.add(MessageEvent, message=TextMessage)
