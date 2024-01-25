@@ -15,7 +15,9 @@ TOKEN = os.environ.get('TOKEN')
 SECRET = os.environ.get('SECRET')
 
 app = Flask(__name__)
-
+@app.post('/')
+async def index():
+    return 200
 signature = request.headers['X-Line-Signature']
 
 body = request.get_data(as_text=True)
@@ -29,6 +31,8 @@ try:
 except InvalidSignatureError:
     app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
     abort(400)
+
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     with ApiClient(configuration) as api_client:
@@ -40,5 +44,5 @@ def handle_message(event):
             )
         )
 
-if __name__ == '__main__':
-    app.run(port=os.environ.get('PORT') or 3000)
+
+app.run(port=3000)
