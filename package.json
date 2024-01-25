@@ -4,11 +4,14 @@
   "description": "",
   "main": "main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node build/main.js",
+    "build": "tsc ."
   },
   "author": "",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "messaging-api-line": "^1.1.0"
+    "messaging-api-line": "^1.1.0",
+    "typescript": "^5.3.3"
   }
 }
