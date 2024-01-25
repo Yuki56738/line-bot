@@ -2,7 +2,10 @@ import * as dotenv from "dotenv";
 // @ts-ignore
 import {MessageClient} from "messaging-api-line";
 // @ts-ignore
-import server from "./server";
+import * as server from "./server";
+
+import {line, router} from "bottender/router";
+import {Context} from "bottender";
 
 dotenv.config()
 // @ts-ignore
@@ -13,6 +16,16 @@ const SECRET = process.env.SECRET
 // @ts-ignore
 const port = process.env.PORT || 3000
 
-server.listing(port, () =>{
+function App(){
+    return router([
+        line.message(HandleMessage)
+    ])
+}
+
+async function HandleMessage(context: Context){
+    // @ts-ignore
+    context.response('Hello')
+}
+server.listen(port, () =>{
     console.log(`Listening on: ${port}`)
 })
