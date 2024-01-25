@@ -94,13 +94,17 @@ app.post("/webhook", function (req: any, res: any) {
         body: dataString!,
     }
     const request = https.request(webhookOptions, (res) => {
-        res.on("data", (d) => {
-            process.stdout.write(d)
-        })
+        try {
+            res.on("data", (d) => {
+                process.stdout.write(d)
+            })
+        }catch (e) {
+            console.error(e)
+        }
     })
-    request.on('error', (err) => {
-        console.error(err)
-    })
+    // request.on('error', (err) => {
+    //     console.error(err)
+    // })
     request.write(dataString)
     request.end()
 })
