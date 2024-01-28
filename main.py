@@ -59,4 +59,4 @@ def handle_message(event):
 
 
 # if __name__ == "__main__":
-app.run(port=os.getenv('PORT', default=3000), debug=False)
+app.run(port=os.getenv('PORT', default=3000))
