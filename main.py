@@ -2,23 +2,12 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, request, abort
 
-from linebot.v3 import (
-    WebhookHandler
-)
+from linebot.v3 import *
 from linebot.v3.exceptions import (
     InvalidSignatureError
 )
-from linebot.v3.messaging import (
-    Configuration,
-    ApiClient,
-    MessagingApi,
-    ReplyMessageRequest,
-    TextMessage
-)
-from linebot.v3.webhooks import (
-    MessageEvent,
-    TextMessageContent
-)
+from linebot.v3.messaging import *
+from linebot.v3.webhooks import *
 load_dotenv()
 app = Flask(__name__)
 
@@ -50,12 +39,31 @@ def callback():
 def handle_message(event):
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
+        if event.message.text == 'senduserid':
+            print(event.user_id)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
                 messages=[TextMessage(text=event.message.text)]
             )
         )
+
+
+@app.route("/discordjoin", methods=['POST'])
+def send_line_message():
+    user_id = request.json.get('user_id')
+    message = request.json.get('message')
+
+    with ApiClient(configuration) as api_client:
+        line_bot_api = MessagingApi(api_client)
+        line_bot_api.push_message_with_http_info(
+            PushMessageRequest(
+                to=user_id,
+                messages=[TextMessage(text=message)]
+            )
+        )
+
+    return 'Message sent to user'
 
 
 # if __name__ == "__main__":
